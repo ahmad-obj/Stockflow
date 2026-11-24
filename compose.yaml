@@ -1,0 +1,20 @@
+services:
+  oracle:
+    image: gvenzl/oracle-free:23.26.4-slim-faststart
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:?Set ORACLE_PASSWORD}
+      APP_USER: stockflow
+      APP_USER_PASSWORD: ${STOCKFLOW_DB_PASSWORD:?Set STOCKFLOW_DB_PASSWORD}
+    ports:
+      - "127.0.0.1:${STOCKFLOW_ORACLE_PORT:-1521}:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  oracle-data:
